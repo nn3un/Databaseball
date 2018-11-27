@@ -68,7 +68,18 @@ else{
 <!-- Jquery -->
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         
-<body class="container">
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-info">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link text-white" href="index.php">Databaseball</a></li>
+                </ul>
+                <a class="nav-link text-white" href="teams.php">Teams</a>
+                <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
+            </div>
+        </div>
+    </nav>
 	<?php 
 		if(isset($_SESSION['success'])) {
 			echo "<div class='alert alert-success text-center m-5 px-5'>";
@@ -84,10 +95,10 @@ else{
 		} 
 	?>
 
-	<form action="teams_update.php" method="POST" class="m-5 px-5">
+	<form action="teams_update.php" method="POST" class="m-5 mx-auto p-2 border  rounded w-50">
 		<div class="form-group">
 	        <label for="team_id">team_id: </label>
-	        <input type = "number" class="form-control" name ="team_id" value="<?php echo $team_id; ?>" required><br>
+	        <input type = "number" class="form-control" name ="team_id" readonly value="<?php echo $team_id; ?>" required><br>
     	</div>
 		<div class="form-group">
 	        <label for="location">Location: </label>

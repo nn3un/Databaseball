@@ -27,7 +27,7 @@
 
             #welcome-text{
                 position: absolute;
-                bottom: 50vh;
+                bottom: 40vh;
                 right: 0px;
                 left: 0px;
                 font-family: impact;
@@ -42,6 +42,7 @@
                 <p>Databaseball</p>
                 <!-- Login and register links -->
                 <a href = "teams.php" class="btn btn-primary landing-btn">Team</a>
+                <a href = "teams.php" class="btn btn-primary landing-btn">Stadium</a>
             </div>
         </div>
     </body>

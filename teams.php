@@ -60,7 +60,20 @@ else if(isset($_POST['delete'])) {
 <!-- Jquery -->
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         
-<body class="container">
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link text-white" href="index.php">Databaseball</a></li>
+                </ul>
+                <a class="nav-link text-white" href="teams.php">Teams</a>
+                <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
+            </div>
+        </div>
+    </nav>
+
+    <!--Error and success messages -->
 	<?php 
 		if(isset($_SESSION['success'])) {
 			echo "<div class='alert alert-success text-center m-5 px-5'>";
@@ -75,64 +88,80 @@ else if(isset($_POST['delete'])) {
 			unset($_SESSION['failure']);
 		} 
 	?>
-	<form action="teams.php" method="POST" class="m-5 px-5">
-		<div class="form-group">
-	        <label for="location">Location: </label>
-	        <input type = "text" class="form-control"  name = "location" placeholder = "Washington" required><br>
-    	</div>
-    	<div class="form-group">
-	        <label for="team_name">Team Name: </label>
-	        <input type = "text" class="form-control" name = "team_name" placeholder = "Nationals" required><br>
-    	</div>
-    	<div class="form-group">
-	        <label for="years">Years Existed: </label>
-	        <input type = "text" class="form-control" name = "years_existed" placeholder = "100" required><br>
-    	</div>
-    	<button class="btn btn-success w-100" name="insert">Insert into table</button>
-	</form>
-	<form method="POST" class="m-5 px-5" action="teams_update.php">
-		<div class="form-group">
-	        <label for="team_id">Enter Team Id: </label>
-	        <input type = "text" class="form-control" name = "team_id" placeholder = "100" required><br>
-    	</div>
-    	<button class="btn btn-primary m-0 w-100" name = "update">Update</button>
-	</form>
-	<form method="POST" class="m-5 px-5" action="teams.php">
-		<div class="form-group">
-	        <label for="team_id">Enter Team Id: </label>
-	        <input type = "text" class="form-control" name = "team_id" placeholder = "100" required><br>
-    	</div>
-    	<button class="btn btn-danger m-0 w-100" name ="delete">Delete</button>
-	</form>
-	<table class=" table-bordered table table-striped">
-        <thead>
-            <tr>
-                <th>team_id</th> 
-                <th>Team Name</th> 
-                <th>Location</th>
-                <th>Years Existed</th>
-            </tr>
-        </thead>
-        <tbody>
-        	<?php
-			if($connection){
-				$query = "SELECT * FROM Team";
-			    $select_all_posts_query = mysqli_query($connection,$query);
 
-			    while($row = mysqli_fetch_assoc($select_all_posts_query)) {
-			    	echo "
-			    	<tr>
-			    		<td>".$row['team_id']."</td>
-			    		<td>".$row['team_name']."</td>
-			    		<td>".$row['location']."</td>
-			    		<td>".$row['years_existed']."</td>
-			    	</tr>
-			    	";
-				}
-			}
-	?>
-        </tbody>
-    </table>
-	
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <!-- Form to insert new team -->
+            	<form action="teams.php" method="POST" class="m-5 p-2 border  rounded">
+            		<div class="form-group">
+            	        <label for="location">Location: </label>
+            	        <input type = "text" class="form-control"  name = "location" placeholder = "Washington" required><br>
+                	</div>
+                	<div class="form-group">
+            	        <label for="team_name">Team Name: </label>
+            	        <input type = "text" class="form-control" name = "team_name" placeholder = "Nationals" required><br>
+                	</div>
+                	<div class="form-group">
+            	        <label for="years">Years Existed: </label>
+            	        <input type = "text" class="form-control" name = "years_existed" placeholder = "100" required><br>
+                	</div>
+                	<button class="btn btn-success w-100" name="insert">Insert into table</button>
+            	</form>
+            </div>
+            <div class="col">
+                <!-- Form to update team -->
+            	<form method="POST" class="m-5 p-2 border  rounded" action="teams_update.php">
+                    <div class="form-group">
+                        <label for="team_id">Enter Team Id: </label>
+                        <input type = "text" class="form-control" name = "team_id" placeholder = "100" required><br>
+                    </div>
+                    <button class="btn btn-primary m-0 w-100" name = "update">Update</button>
+                </form>
+
+                <!-- Form to delete team -->
+            	<form method="POST" class="m-5 p-2 border rounded" action="teams.php">
+            		<div class="form-group">
+            	        <label for="team_id">Enter Team Id: </label>
+            	        <input type = "text" class="form-control" name = "team_id" placeholder = "100" required><br>
+                	</div>
+                	<button class="btn btn-danger m-0 w-100" name ="delete">Delete</button>
+            	</form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table to show team -->
+    <div class='container'>
+    	<table class=" table-bordered table table-striped">
+            <thead>
+                <tr>
+                    <th>team_id</th> 
+                    <th>Team Name</th> 
+                    <th>Location</th>
+                    <th>Years Existed</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<?php
+    			if($connection){
+    				$query = "SELECT * FROM Team";
+    			    $select_all_posts_query = mysqli_query($connection,$query);
+
+    			    while($row = mysqli_fetch_assoc($select_all_posts_query)) {
+    			    	echo "
+    			    	<tr>
+    			    		<td>".$row['team_id']."</td>
+    			    		<td>".$row['team_name']."</td>
+    			    		<td>".$row['location']."</td>
+    			    		<td>".$row['years_existed']."</td>
+    			    	</tr>
+    			    	";
+    				}
+    			}
+    	?>
+            </tbody>
+        </table>
+	</div>
 </body>
 </html>
