@@ -151,7 +151,6 @@ else if(isset($_POST['delete'])) {
     <form class="m-1 p-2" name="search" method="POST" action="games.php">
         <p class="h2 pb-2">Search in Games</p>
         <hr>
-    
             <div class="form-group">
                 <label for="home_team_name">By Home Team: </label>
                 <input type = "text" class="form-control"  name = "home_team_name" placeholder = "%Sox"><br>

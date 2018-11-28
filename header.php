@@ -23,7 +23,8 @@
                 <a class="nav-link text-white" href="teams.php">Teams</a>
                 <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
                 <a class="nav-link text-white" href="games.php">Games</a>
-                <a class="nav-link text-white" href="coaches.php">Coaches</a> 
+                <a class="nav-link text-white" href="coaches.php">Coaches</a><br> 
+                <a class="nav-link text-white" href="views.php">Saved Queries</a>
             </div>
         </div>
     </nav>

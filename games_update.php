@@ -83,63 +83,60 @@ else{
 ?>
 <?php include 'header.php';?>
 
-         <form action="games_update.php" method="POST" class="m-5 mx-auto p-2 border  rounded w-50">
-          <div class="form-group">
+    <form action="games_update.php" method="POST" class="m-5 mx-auto p-2 border  rounded w-50">
+        <div class="form-group">
             <label for="game_id">game_id: </label>
             <input type = "number" class="form-control"  name = "game_id" required value="<?php echo $game_id; ?>" readonly><br>
         </div>
-
+        <div class="form-group">
+            <label for="home_team_name">Home Team: </label>
+            <select class = "w-100 mx-1 form-control" name="home_team_name">
+                <?php
+                if($connection){
+                    $query = "SELECT team_name FROM Team";
+                    $select_team_names_query = mysqli_query($connection,$query);
+                    while($row = mysqli_fetch_assoc($select_team_names_query)) {
+                        if ($row['team_name'] == $home_team_name){
+                            echo ("<option selected>".$row['team_name']."</option>");
+                        }
+                        else{
+                            echo ("<option>".$row['team_name']."</option>");
+                        }
+                    }
+                }
+                ?>
+            </select>
         </div>
-            <div class="form-group">
-                <label for="home_team_name">Home Team: </label>
-                <select class = "w-100 mx-1 form-control" name="home_team_name">
-                    <?php
-                    if($connection){
-                        $query = "SELECT team_name FROM Team";
-                        $select_team_names_query = mysqli_query($connection,$query);
-                        while($row = mysqli_fetch_assoc($select_team_names_query)) {
-                            if ($row['team_name'] == $home_team_name){
-                                echo ("<option selected>".$row['team_name']."</option>");
-                            }
-                            else{
-                                echo ("<option>".$row['team_name']."</option>");
-                            }
+
+        <div class="form-group">
+            <label for="away_team_name">Away Team: </label>
+            <select class = "w-100 mx-1 form-control" name="away_team_name">
+                <?php
+                if($connection){
+                    $query = "SELECT team_name FROM Team";
+                    $select_team_names_query = mysqli_query($connection,$query);
+                    while($row = mysqli_fetch_assoc($select_team_names_query)) {
+                        if ($row['team_name'] == $away_team_name){
+                            echo ("<option selected>".$row['team_name']."</option>");
+                        }
+                        else{
+                            echo ("<option>".$row['team_name']."</option>");
                         }
                     }
-                    ?>
-                </select>
-            </div>
+                }
+                ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="home_team_runs">Home Team Runs: </label><br>
+            <input type = "number" min="0" class="form-control" name = "home_team_runs" value="<?php echo $home_team_runs; ?>" required><br>
+        </div>
 
-            <div class="form-group">
-                <label for="away_team_name">Away Team: </label>
-                <select class = "w-100 mx-1 form-control" name="away_team_name">
-                    <?php
-                    if($connection){
-                        $query = "SELECT team_name FROM Team";
-                        $select_team_names_query = mysqli_query($connection,$query);
-                        while($row = mysqli_fetch_assoc($select_team_names_query)) {
-                            if ($row['team_name'] == $away_team_name){
-                                echo ("<option selected>".$row['team_name']."</option>");
-                            }
-                            else{
-                                echo ("<option>".$row['team_name']."</option>");
-                            }
-                        }
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="home_team_runs">Home Team Runs: </label><br>
-                <input type = "number" min="0" class="form-control" name = "home_team_runs" value="<?php echo $home_team_runs; ?>" required><br>
-            </div>
-
-            <div class="form-group">
-                <label for="away_team_runs">Away Team Runs: </label><br>
-                <input type = "number" min="0" class="form-control" name = "away_team_runs" value="<?php echo $home_team_runs; ?>" required><br>
-            </div>
+        <div class="form-group">
+            <label for="away_team_runs">Away Team Runs: </label><br>
+            <input type = "number" min="0" class="form-control" name = "away_team_runs" value="<?php echo $home_team_runs; ?>" required><br>
+        </div>
         <button class="btn btn-success w-100" name="update_info">Update entry</button>
         </form>
-
     </body>
 </html>
