@@ -20,7 +20,7 @@ else{
 		$team_id = $_POST['team_id'];
 		$query = "SELECT * FROM Team WHERE team_id=$team_id";
 	    $select_query = mysqli_query($connection,$query);
-	    if ($select_query){
+	    if ($select_query && mysqli_num_rows($select_query) > 0){
 	    	$row = mysqli_fetch_assoc($select_query);
 	    	$team_name = $row['team_name'];
 	        $location = $row['location'];
@@ -28,7 +28,8 @@ else{
 	    }
 	    else{
 	    	$_SESSION['failure'] = "Update failed. Most likely wrong team_id";
-	    	//header("Location: teams.php");
+	    	header("Location: teams.php");
+	    	exit();
 	    }
 	}
 
@@ -43,13 +44,15 @@ else{
             echo $query;
             $update_query = mysqli_query($connection, $query);
             if (!$update_query) {
-                die('QUERY FAILED' . mysqli_error($connection));
-                $_SESSION['failure'] = "Query Failed";
-                header('Location: teams.php');
+                $error_msg =  mysqli_error($connection);
+	            $_SESSION['failure'] = "Update Failed: $error_msg";
+	            header("Location: teams.php");
+	            exit();
             }
             else{
 		        $_SESSION['success'] = 'Update successful!';
 		        header('Location: teams.php');
+		        exit();
             }
         }
         else{
@@ -77,6 +80,7 @@ else{
                 </ul>
                 <a class="nav-link text-white" href="teams.php">Teams</a>
                 <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
+                <a class="nav-link text-white" href="games.php">Games</a>
             </div>
         </div>
     </nav>
@@ -110,7 +114,7 @@ else{
     	</div>
     	<div class="form-group">
 	        <label for="years">Years Existed: </label>
-	        <input type = "text" class="form-control" name = "years_existed" value="<?php echo $years_existed; ?>" required><br>
+	        <input type = "number" class="form-control" min="0" name = "years_existed" value="<?php echo $years_existed; ?>" required><br>
     	</div>
     	<button class="btn btn-success w-100" name="update_info">Update entry</button>
 	</form>

@@ -21,7 +21,7 @@ else{
 		$stadium_id = $_POST['stadium_id'];
 		$query = "SELECT stadium_id, stadium_name, team_name, occupancy, indoor FROM Stadium natural join Team WHERE stadium_id={$stadium_id}";
 	    $select_query = mysqli_query($connection,$query);
-	    if ($select_query){
+	    if ($select_query && mysqli_num_rows($select_query) > 0){
 	    	$row = mysqli_fetch_assoc($select_query);
 	    	$stadium_name = $row['stadium_name'];
 	    	$team_name = $row['team_name'];
@@ -31,6 +31,7 @@ else{
 	    else{
 	    	$_SESSION['failure'] = "Update failed. Most likely wrong stadium_id";
 	    	header("Location: stadiums.php");
+            exit();
 	    }
 	}
 
@@ -44,21 +45,25 @@ else{
         $query = "SELECT team_id FROM Team WHERE team_name='{$team_name}'";
         $get_team_id_query = mysqli_query($connection, $query);
         if (!$get_team_id_query) {
-            die('QUERY FAILED' . mysqli_error($connection));
-            $_SESSION['failure'] = "Getting team_id Query Failed";
+            $error_msg =  mysqli_error($connection);
+            $_SESSION['failure'] = "Failed to get team_id: $error_msg";
+            header("Location: stadiums.php");
+            exit();
         }
         $row = mysqli_fetch_assoc($get_team_id_query);
         $team_id = $row['team_id'];
         $query = "UPDATE Stadium SET stadium_name = '{$stadium_name}', occupancy = {$occupancy}, indoor = '{$indoor}', team_id = {$team_id} WHERE stadium_id = {$stadium_id}";
         $update_query = mysqli_query($connection, $query);
         if (!$update_query) {
-            die('QUERY FAILED' . mysqli_error($connection));
-            $_SESSION['failure'] = "Query Failed";
-            header('Location: stadiums.php');
+            $error_msg =  mysqli_error($connection);
+            $_SESSION['failure'] = "Update Failed: $error_msg";
+            header("Location: teams.php");
+            exit();
         }
         else{
 	        $_SESSION['success'] = 'Update successful!';
 	        header('Location: stadiums.php');
+            exit();
         }	
     }
 }
@@ -82,6 +87,7 @@ else{
                 </ul>
                 <a class="nav-link text-white" href="teams.php">Teams</a>
                 <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
+                <a class="nav-link text-white" href="games.php">Games</a>
             </div>
         </div>
     </nav>
@@ -111,7 +117,7 @@ else{
         </div>
         <div class="form-group">
             <label for="occupancy">Occupancy: </label><br>
-            <input type = "number" class="form-control" name = "occupancy" value="<?php echo $occupancy; ?>" required><br>
+            <input type = "number" min="0" class="form-control" name = "occupancy" value="<?php echo $occupancy; ?>" required><br>
         </div>
 
         <div class="form-group">

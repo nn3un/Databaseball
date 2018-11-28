@@ -19,8 +19,9 @@ if(isset($_POST['insert'])) {
     $query = "SELECT team_id FROM Team WHERE team_name='{$team_name}'";
     $get_team_id_query = mysqli_query($connection, $query);
     if (!$get_team_id_query) {
-        die('team_id QUERY FAILED' . mysqli_error($connection));
-        $_SESSION['failure'] = "Getting team_id Query Failed";
+        $error_msg = mysqli_error($connection);
+        $_SESSION['failure'] = "Getting team_id Query Failed $error_msg";
+        header('Location: games.php');
     }
     else{
         $row = mysqli_fetch_assoc($get_team_id_query);
@@ -28,8 +29,10 @@ if(isset($_POST['insert'])) {
         $query = "INSERT INTO Stadium (stadium_name, occupancy, indoor, team_id) VALUES ('{$stadium_name}', '{$occupancy}', '{$indoor}', '{$team_id}');";
         $insert_query = mysqli_query($connection, $query);
         if (!$insert_query) {
-            die('INSERT QUERY FAILED' . mysqli_error($connection));
-            $_SESSION['failure'] = "Query Failed";
+            $error_msg =  mysqli_error($connection);
+            $_SESSION['failure'] = "Insertion Failed: $error_msg";
+            header("Location: stadiums.php");
+            exit();
         }
         else{
             $_SESSION['success'] = "Insertion success!";
@@ -41,12 +44,12 @@ else if(isset($_POST['delete'])) {
     if (!empty($stadium_id)) {
         $query = "DELETE FROM Stadium WHERE stadium_id=$stadium_id;";
         $delete_query = mysqli_query($connection, $query);
-        if (!$delete_query) {
-            die('QUERY FAILED' . mysqli_error($connection));
-            $_SESSION['failure'] = "Query Failed, maybe wrong id?";
+        if (mysqli_affected_rows($connection) > 0) {
+            $_SESSION['success'] = "Succcessfully deleted";
         }
         else{
-            $_SESSION['success'] = "Succcessfully deleted";
+            $error_msg = mysqli_error($connection);
+            $_SESSION['failure'] = "stadium_id $stadium_id does not exist";
         }
     }
     else{
@@ -74,25 +77,26 @@ else if(isset($_POST['delete'])) {
                 </ul>
                 <a class="nav-link text-white" href="teams.php">Teams</a>
                 <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
+                <a class="nav-link text-white" href="games.php">Games</a>
             </div>
         </div>
     </nav>
 
-	<?php 
-  if(isset($_SESSION['success'])) {
-   echo "<div class='alert alert-success text-center m-5 px-5'>";
-   echo $_SESSION['success']; 
-   echo "</div>";
-   unset($_SESSION['success']);
-} 
-if(isset($_SESSION['failure'])) {
-   echo "<div class='alert alert-danger text-center m-5 px-5'>";
-   echo $_SESSION['failure']; 
-   echo "</div>";
-   unset($_SESSION['failure']);
-} 
-?>
 <div class="container">
+            <?php 
+      if(isset($_SESSION['success'])) {
+       echo "<div class='alert alert-success text-center mx-5 my-2 px-5'>";
+       echo $_SESSION['success']; 
+       echo "</div>";
+       unset($_SESSION['success']);
+    } 
+    if(isset($_SESSION['failure'])) {
+       echo "<div class='alert alert-danger text-center mx-5 my-2 px-5'>";
+       echo $_SESSION['failure']; 
+       echo "</div>";
+       unset($_SESSION['failure']);
+    } 
+    ?>
     <div class="row">
         <div class="col">
             <form action="stadiums.php" method="POST" class="m-5 p-2 border rounded">
@@ -102,7 +106,7 @@ if(isset($_SESSION['failure'])) {
                 </div>
                 <div class="form-group">
                     <label for="occupancy">Occupancy: </label><br>
-                    <input type = "number" class="form-control" name = "occupancy" placeholder = "100000" required><br>
+                    <input type = "number" min="0" class="form-control" name = "occupancy" placeholder = "100000" required><br>
                 </div>
 
                 <div class="form-group">
@@ -139,7 +143,7 @@ if(isset($_SESSION['failure'])) {
             </form>
             <form method="POST" class="m-5 mt-4 p-2 border rounded" action="stadiums.php">
                 <div class="form-group">
-                    <label for="team_id">Enter Stadium Id: </label>
+                    <label for="stadium_id">Enter Stadium Id: </label>
                     <input type = "text" class="form-control" name = "stadium_id" required><br>
                 </div>
                 <button class="btn btn-danger m-0 w-100" name ="delete">Delete</button>

@@ -42,7 +42,8 @@
                 <p>Databaseball</p>
                 <!-- Login and register links -->
                 <a href = "teams.php" class="btn btn-primary landing-btn">Team</a>
-                <a href = "teams.php" class="btn btn-primary landing-btn">Stadium</a>
+                <a href = "stadiums.php" class="btn btn-primary landing-btn">Stadium</a>
+                <a href = "games.php" class="btn btn-primary landing-btn">Game</a>
             </div>
         </div>
     </body>

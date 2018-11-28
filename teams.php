@@ -19,8 +19,10 @@ if(isset($_POST['insert'])) {
             $query = "INSERT INTO Team (team_name, location, years_existed) VALUES ('{$team_name}', '{$location}', '{$years_existed}')";
             $insert_query = mysqli_query($connection, $query);
             if (!$insert_query) {
-                die('QUERY FAILED' . mysqli_error($connection));
-                $_SESSION['failure'] = "Query Failed";
+                $error_msg =  mysqli_error($connection);
+                $_SESSION['failure'] = "Insertion Failed: $error_msg";
+                header("Location: teams.php");
+                exit();
             }
             else{
             	$_SESSION['success'] = "Insertion success!";
@@ -36,9 +38,11 @@ else if(isset($_POST['delete'])) {
     if (!empty($team_id)) {
         $query = "DELETE FROM Team WHERE team_id=$team_id;";
         $delete_query = mysqli_query($connection, $query);
-        if (!$delete_query) {
-            die('QUERY FAILED' . mysqli_error($connection));
-            $_SESSION['failure'] = "Query Failed, maybe wrong id?";
+        if (!$delete_query || mysqli_affected_rows($connection) <= 0) {
+            $error_msg =  mysqli_error($connection);
+            $_SESSION['failure'] = "Deletion Failed: $error_msg";
+            header("Location: teams.php");
+            exit();
         }
         else{
         	$_SESSION['success'] = "Succcessfully deleted";
@@ -69,27 +73,29 @@ else if(isset($_POST['delete'])) {
                 </ul>
                 <a class="nav-link text-white" href="teams.php">Teams</a>
                 <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
+                <a class="nav-link text-white" href="games.php">Games</a>
             </div>
         </div>
     </nav>
 
-    <!--Error and success messages -->
-	<?php 
-		if(isset($_SESSION['success'])) {
-			echo "<div class='alert alert-success text-center m-5 px-5'>";
-			echo $_SESSION['success']; 
-			echo "</div>";
-			unset($_SESSION['success']);
-		} 
-		if(isset($_SESSION['failure'])) {
-			echo "<div class='alert alert-danger text-center m-5 px-5'>";
-			echo $_SESSION['failure']; 
-			echo "</div>";
-			unset($_SESSION['failure']);
-		} 
-	?>
+    
 
     <div class="container">
+        <!--Error and success messages -->
+        <?php 
+            if(isset($_SESSION['success'])) {
+                echo "<div class='alert alert-success text-center mx-5 my-2 px-5'>";
+                echo $_SESSION['success']; 
+                echo "</div>";
+                unset($_SESSION['success']);
+            } 
+            if(isset($_SESSION['failure'])) {
+                echo "<div class='alert alert-danger text-center mx-5 my-2 px-5'>";
+                echo $_SESSION['failure']; 
+                echo "</div>";
+                unset($_SESSION['failure']);
+            } 
+        ?>
         <div class="row">
             <div class="col">
                 <!-- Form to insert new team -->
@@ -104,7 +110,7 @@ else if(isset($_POST['delete'])) {
                 	</div>
                 	<div class="form-group">
             	        <label for="years">Years Existed: </label>
-            	        <input type = "text" class="form-control" name = "years_existed" placeholder = "100" required><br>
+            	        <input type = "number" class="form-control" name = "years_existed" placeholder = "100" min="0" required><br>
                 	</div>
                 	<button class="btn btn-success w-100" name="insert">Insert into table</button>
             	</form>
