@@ -80,46 +80,7 @@ else if(isset($_POST['delete'])) {
     unset($_POST['delete']);
 }
 ?>
-<!DOCTYPE HTML>
-<html>
-
-<title>
-</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<!-- Jquery -->
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-info">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a class="nav-link text-white" href="index.php">Databaseball</a></li>
-                </ul>
-                <a class="nav-link text-white" href="teams.php">Teams</a>
-                <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
-                <a class="nav-link text-white" href="games.php">Games</a>
-            </div>
-        </div>
-    </nav>
-
-
-    <div class="container">
-        <?php 
-        if(isset($_SESSION['success'])) {
-         echo "<div class='alert alert-success text-center mx-5 my-2 px-5'>";
-         echo $_SESSION['success']; 
-         echo "</div>";
-         unset($_SESSION['success']);
-     } 
-     if(isset($_SESSION['failure'])) {
-         echo "<div class='alert alert-danger text-center mx-5 my-2 px-5'>";
-         echo $_SESSION['failure']; 
-         echo "</div>";
-         unset($_SESSION['failure']);
-     } 
-     ?>
+<?php include 'header.php';?>
      <div class="row">
         <div class="col">
             <form action="games.php" method="POST" class="m-5 p-2 border rounded">
@@ -186,6 +147,42 @@ else if(isset($_POST['delete'])) {
 </div>
 
 <div class="container">
+    <div class="border rounded my-3 px-2 py-0">
+    <form class="m-1 p-2" name="search" method="POST" action="games.php">
+        <p class="h2 pb-2">Search in Games</p>
+        <hr>
+    
+            <div class="form-group">
+                <label for="home_team_name">By Home Team: </label>
+                <input type = "text" class="form-control"  name = "home_team_name" placeholder = "%Sox"><br>
+            </div>
+            <div class="form-group">
+                <label for="home_team_name">By Away Team: </label>
+                <input type = "text" class="form-control"  name = "away_team_name" placeholder = "Diamond%"><br>
+            </div>
+            <div class="form-group">
+                <label for="home_team_runs">By Home Team Runs: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_home_team_runs" min="0" placeholder = "0">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_home_team_runs" min="1" placeholder = "10000" display="inline"><br>
+            </div>
+            <div class="form-group">
+                <label for="away_team_runs">By Away Team Runs: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_away_team_runs" min="0" placeholder = "0">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_away_team_runs" min="1" placeholder = "10000" display="inline"><br>
+            </div>
+            <div class="form-group">
+                <label for="winner">By Winner: </label><br>
+                <input class="ml-0 mr-2" type="radio" name="winner" value="1">Home Team
+                <input class="ml-5 mr-2" type="radio" name="winner" value="0">Away Team
+                <input class="ml-5 mr-2" type="radio" name="winner" value="-1" checked>None<br>
+            </div>
+            <hr class="pt-2">
+            <div class=form-group>
+                    <label for="sort[]" class='h2 pb-2'>Sort Results By: </label><br>
+                    <input type="checkbox" class="ml-0 mr-2 d-inline" name="sort[]" value="home_team_name">Home Team
+                    <input type="checkbox" class="ml-5 mr-2 d-inline" name="sort[]" value="away_team_name">Away Team
+                    <input type="checkbox" class="ml-5 mr-2 d-inline" name="sort[]" value="home_team_runs">Home Team Runs
+                    <input type="checkbox" class="ml-5 mr-2 d-inline" name="sort[]" value="away_team_runs">Away Team Runs<br>
+            </div>
+            <button class="btn btn-secondary w-100" name ="search">Search</button>
+    </form>
+    </div>
     <table class=" table-bordered table table-striped">
         <thead>
             <tr>
@@ -200,10 +197,69 @@ else if(isset($_POST['delete'])) {
            <?php
            if($connection){
             $query = "SELECT game_id, home_team_name,  away_team_name, home_team_runs, away_team_runs FROM Game natural join (select game_id, team_name as home_team_name from Game left outer join Team on home_team_id = team_id) as home_team_info natural join
-            (select game_id, team_name as away_team_name from Game left outer join Team on away_team_id = team_id) as away_team_info;";
+            (select game_id, team_name as away_team_name from Game left outer join Team on away_team_id = team_id) as away_team_info";
+            if (isset($_POST['search'])){
+                $params = [];
+                if (strlen($_POST['home_team_name']) > 0){
+                    $params['home_team_name'] = " LIKE '{$_POST['home_team_name']}'";
+                }
+                if (strlen($_POST['away_team_name']) > 0){
+                    $params['away_team_name'] = " LIKE '{$_POST['away_team_name']}'";
+                }
+                if (strlen($_POST['min_home_team_runs']) > 0){
+                    $params['home_team_runs'] = " >= {$_POST['min_home_team_runs']}";
+                }
+                //IMPORTANT Don't get rid of the space before 'home_team_runs'
+                if (strlen($_POST['max_home_team_runs']) > 0){
+                    $params[' home_team_runs'] = " <= {$_POST['max_home_team_runs']}";
+                }
+                if (strlen($_POST['min_away_team_runs']) > 0){
+                    $params['away_team_runs'] = " >= {$_POST['min_away_team_runs']}";
+                }
+                //IMPORTANT Don't get rid of the space before 'away_team runs'
+                if (strlen($_POST['max_away_team_runs']) > 0){
+                    $params[' away_team_runs'] = " <= {$_POST['max_away_team_runs']}";
+                }
+                //IMPORTANT Don't get rid of the space after 'home_team_runs'
+                if ($_POST['winner'] == 1){
+                    $params['home_team_runs '] = " > away_team_runs";
+                }
+                //IMPORTANT Don't get rid of the space after 'away_team_runs'
+                else if ($_POST['winner'] == 0){
+                    $params['away_team_runs '] = " > home_team_runs";
+                }
+                if(count($params) > 0){
+                    $query .= " WHERE ";
+                    foreach($params as $key => $value){
+                        $query .= " $key $value AND";
+                    }
+                    //Getting rid of last AND
+                    $query = substr($query, 0, -3);
+                }
+                if (isset($_POST['sort'])){
+                    $query .= " ORDER BY ";
+                    
+                    if(in_array('home_team_runs', $_POST['sort'])){
+                        $query .= " home_team_runs ASC,";
+                    }
+                    if(in_array('away_team_runs', $_POST['sort'])){
+                        $query .= " away_team_runs ASC,";
+                    }
+                    if(in_array('home_team_name', $_POST['sort'])){
+                        $query .= " home_team_name ASC,";
+                    }
+                    if(in_array('away_team_name', $_POST['sort'])){
+                        $query .= " away_team_name ASC,";
+                    }
+                    //Getting rid of last Comma
+                    $query = substr($query, 0, -1);
+                }
+            }
+            $query .= ";";
             $select_all_games_query = mysqli_query($connection,$query);
             if(!$select_all_games_query){
-                header('Location: index.php');
+                $error_msg = mysqli_error($connection);
+                $_SESSION['failure'] = "Couldn't load query: $query $error_msg";
                 exit();
             }
             while($row = mysqli_fetch_assoc($select_all_games_query)) {
@@ -217,6 +273,10 @@ else if(isset($_POST['delete'])) {
                 </tr>
                 ";
             }
+        }
+        else{
+            $_SESSION['failure'] = "Couldn't load query";
+            exit();
         }
         ?>
     </tbody>

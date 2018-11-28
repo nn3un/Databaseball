@@ -58,45 +58,7 @@ else if(isset($_POST['delete'])) {
     unset($_POST['delete']);
 }
 ?>
-<!DOCTYPE HTML>
-<html>
-
-<title>
-</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<!-- Jquery -->
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-info">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a class="nav-link text-white" href="index.php">Databaseball</a></li>
-                </ul>
-                <a class="nav-link text-white" href="teams.php">Teams</a>
-                <a class="nav-link text-white" href="stadiums.php">Stadiums</a>
-                <a class="nav-link text-white" href="games.php">Games</a>
-            </div>
-        </div>
-    </nav>
-
-<div class="container">
-            <?php 
-      if(isset($_SESSION['success'])) {
-       echo "<div class='alert alert-success text-center mx-5 my-2 px-5'>";
-       echo $_SESSION['success']; 
-       echo "</div>";
-       unset($_SESSION['success']);
-    } 
-    if(isset($_SESSION['failure'])) {
-       echo "<div class='alert alert-danger text-center mx-5 my-2 px-5'>";
-       echo $_SESSION['failure']; 
-       echo "</div>";
-       unset($_SESSION['failure']);
-    } 
-    ?>
+<?php include 'header.php';?>
     <div class="row">
         <div class="col">
             <form action="stadiums.php" method="POST" class="m-5 p-2 border rounded">
@@ -111,8 +73,8 @@ else if(isset($_POST['delete'])) {
 
                 <div class="form-group">
                     <label for="indoor">Indoor: </label><br>
-                    <input class="mx-1" type="radio" name="indoor" value="1">Yes
-                    <input class="mx-1" type="radio" name="indoor" value="0" checked>No
+                    <input class="mr-2" type="radio" name="indoor" value="1">Yes
+                    <input class="ml-5 mr-2" type="radio" name="indoor" value="0" checked>No<br>
                 </div>
                 
                 <div class="form-group">
@@ -127,7 +89,7 @@ else if(isset($_POST['delete'])) {
                             }
                         }
                         ?>
-                    </select>
+                    </select><br>
                 </div>
 
                 <button class="btn btn-success w-100" name="insert">Insert into table</button>
@@ -153,6 +115,36 @@ else if(isset($_POST['delete'])) {
 </div>
 
 <div class="container">
+    <div class="border rounded my-3 px-2 py-0">
+        <form class="m-1 p-2" name="search" method="POST" action="stadiums.php">
+            <p class="h2 pb-2">Search in Stadiums</p>
+            <hr>
+            <div class="form-group">
+                <label for="stadium_name">By Stadium Name: </label>
+                <input type = "text" class="form-control"  name = "stadium_name" placeholder = "B%"><br>
+            </div>
+            <div class="form-group">
+                <label for="team_name">By Team Name: </label>
+                <input type = "text" class="form-control"  name = "team_name" placeholder = "%Sox"><br>
+            </div>
+            <div class="form-group">
+                <label for="years_existed">By Occupancy: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_occupancy" min="0" placeholder = "0">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_occupancy" min="1" placeholder = "10000" display="inline"><br>
+            </div>
+            <div class="form-group">
+                <label for="indoor">By Indoor Status: </label><br>
+                <input class="ml-0 mr-2" type="radio" name="indoor" value="1">Yes
+                <input class="ml-5 mr-2" type="radio" name="indoor" value="0">No
+                <input class="ml-5 mr-2" type="radio" name="indoor" value="-1" checked>None<br>
+            </div>
+            <hr class="pt-2">
+            <div class=form-group>
+                <label for="sort[]" class='h2 pb-2'>Sort Results By: </label><br>
+                <input type="checkbox" class="ml-0 mr-2 d-inline" name="sort[]" value="stadium_name">Stadium Name
+                <input type="checkbox" class="ml-5 mr-2 d-inline" name="sort[]" value="occupancy">Occupancy<br>
+            </div>
+            <button class="btn btn-secondary w-100" name ="search">Search</button>
+        </form>
+    </div>
 <table class=" table-bordered table table-striped">
     <thead>
         <tr>
@@ -165,29 +157,77 @@ else if(isset($_POST['delete'])) {
     </thead>
     <tbody>
      <?php
-     if($connection){
-        $query = "SELECT stadium_id, stadium_name, team_name, location, occupancy, indoor FROM Stadium natural join Team";
-        $select_all_stadiums_query = mysqli_query($connection,$query);
-
-        while($row = mysqli_fetch_assoc($select_all_stadiums_query)) {
-            echo "
-            <tr>
-            <td>".$row['stadium_id']."</td>
-            <td>".$row['stadium_name']."</td>
-            <td>".$row['team_name']."</td>
-            <td>".$row['occupancy']."</td>
-            <td>";
-            if($row['indoor']==1){
-                echo "Yes";
+        if($connection){
+            $query = "SELECT stadium_id, stadium_name, team_name, location, occupancy, indoor FROM Stadium natural join Team";
+            if (isset($_POST['search'])){
+                $params = [];
+                if (strlen($_POST['stadium_name']) > 0){
+                    $params['stadium_name'] = " LIKE '{$_POST['stadium_name']}'";
+                }
+                if (strlen($_POST['team_name']) > 0){
+                    $params['team_name'] = " LIKE '{$_POST['team_name']}'";
+                }
+                if (strlen($_POST['min_occupancy']) > 0){
+                    $params['occupancy'] = " >= {$_POST['min_occupancy']}";
+                }
+                if (strlen($_POST['max_occupancy']) > 0){
+                    //IMPORTANT Don't get rid of the space before 'occupancy'
+                    $params[' occupancy'] = " <= {$_POST['max_occupancy']}";
+                }
+                if ($_POST['indoor'] > -1){
+                    $params['indoor'] = " = {$_POST['indoor']}";
+                }
+                if(count($params) > 0){
+                    $query .= " WHERE ";
+                    foreach($params as $key => $value){
+                        $query .= " $key $value AND";
+                    }
+                    //Getting rid of last AND
+                    $query = substr($query, 0, -3);
+                }
+                if (isset($_POST['sort'])){
+                    $query .= " ORDER BY ";
+                    
+                    if(in_array('occupancy', $_POST['sort'])){
+                        $query .= " occupancy ASC,";
+                    }
+                    if(in_array('stadium_name', $_POST['sort'])){
+                        $query .= " stadium_name ASC,";
+                    }
+                    //Getting rid of last Comma
+                    $query = substr($query, 0, -1);
+                }
             }
-            else{
-                echo "No";
+            $query .= ";";
+            $select_all_stadiums_query = mysqli_query($connection,$query);
+            if (!$select_all_stadiums_query){
+                $error_msg = mysqli_error($connection);
+                $_SESSION['failure'] = "Couldn't load query: $query $error_msg";
+                exit();
             }
-            echo "</td>
-            </tr>
-            ";
+            while($row = mysqli_fetch_assoc($select_all_stadiums_query)) {
+                echo "
+                    <tr>
+                        <td>".$row['stadium_id']."</td>
+                        <td>".$row['stadium_name']."</td>
+                        <td>".$row['team_name']."</td>
+                        <td>".$row['occupancy']."</td>
+                        <td>";
+                if($row['indoor']==1){
+                    echo "Yes";
+                }
+                else{
+                    echo "No";
+                }
+                echo "</td>
+                </tr>
+                ";
+            }
         }
-    }
+        else{
+            $_SESSION['failure'] = "Couldn't load query";
+            exit();
+        }
     ?>
 </tbody>
 </table>

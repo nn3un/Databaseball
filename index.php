@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <!-- jQuery library -->
         <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Rajdhani:700" rel="stylesheet">
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <!-- CSS stylesheet -->
@@ -17,7 +18,7 @@
             }
 
             #welcome{
-                background-image: url(https://www.edx.org/sites/default/files/course/image/promoted/sabr101x-sabermetrics-101-course-banner-378x225.jpg);
+                background-image: url(https://digital.bu.edu/wp-content/uploads/2017/05/Sabermetrics-1024x576.jpg);
                 height: 100vh;
                 text-align: center;
                 position: relative;
@@ -30,7 +31,6 @@
                 bottom: 40vh;
                 right: 0px;
                 left: 0px;
-                font-family: impact;
                 font-size: 80px;
             }
         </style>
@@ -39,10 +39,11 @@
         <!-- The welcoming text -->
         <div id="welcome">
             <div id="welcome-text">
-                <p>Databaseball</p>
+                <p style="font-family: 'Rajdhani', sans-serif; color: white" class="mb-0">Databaseball</p>
                 <!-- Login and register links -->
                 <a href = "teams.php" class="btn btn-primary landing-btn">Team</a>
                 <a href = "stadiums.php" class="btn btn-primary landing-btn">Stadium</a>
+                <a href = "coaches.php" class="btn btn-primary landing-btn">Coach</a>
                 <a href = "games.php" class="btn btn-primary landing-btn">Game</a>
             </div>
         </div>
