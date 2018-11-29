@@ -44,8 +44,11 @@
                 <a href = "teams.php" class="btn btn-primary landing-btn">Team</a>
                 <a href = "stadiums.php" class="btn btn-primary landing-btn">Stadium</a>
                 <a href = "coaches.php" class="btn btn-primary landing-btn">Coach</a>
-                <a href = "games.php" class="btn btn-primary landing-btn">Game</a><br>
-                <a href = "views.php" class="btn btn-success landing-btn">Saved Queries</a>
+                <a href = "games.php" class="btn btn-primary landing-btn">Game</a>
+                <a href = "atbats.php" class="btn btn-primary landing-btn">At Bat</a>
+                <a href = "pitchers.php" class="btn btn-primary landing-btn">Pitcher</a>
+                <a href = "batters.php" class="btn btn-primary landing-btn">Batter</a><br>
+                <a href = "views.php" class="btn btn-info landing-btn">Saved Queries</a>
             </div>
         </div>
     </body>
