@@ -1,12 +1,7 @@
 <?php
 session_start();
-$db['db_host'] = "mysql.cs.virginia.edu";
-$db['db_user'] = "nn3un";
-$db['db_pass'] = "gnmSZIcO";
-$db['db_name'] = "nn3un_Databaseball";
-foreach($db as $key => $value){
-	define(strtoupper($key), $value);
-}
+include 'db.php';
+
 $connection = mysqli_connect(DB_HOST, DB_USER,DB_PASS,DB_NAME);
 if(!isset($_POST['update']) && !isset($_POST['update_info'])){
 	header("Location: pitchers.php");
@@ -58,7 +53,7 @@ else{
 	<form action="pitchers_update.php" method="POST" class="m-5 mx-auto p-2 border  rounded w-50">
 		<div class="form-group">
             <label for="player_id">player_id: </label>
-            <input type = "number" class="form-control"  name = "player_id" required value="<?php echo $player_id; ?>" readonly><br>
+            <input type = "number"  class="form-control"  name = "player_id" required value="<?php echo $player_id; ?>" readonly><br>
         </div>
 		<div class="form-group">
             <label for="coach_name">Wins: </label>
@@ -70,7 +65,7 @@ else{
         </div>
 		<div class="form-group">
             <label for="ERA">ERA: </label>
-            <input type = "number" step = "0.01" class="form-control"  min="0" name = "ERA" required value="<?php echo $ERA; ?>"><br>
+            <input type = "number" step = "0.001" class="form-control"  min="0" name = "ERA" required value="<?php echo $ERA; ?>"><br>
         </div>
 		<div class="form-group">
             <label for="innings_pitched">Innings Pitched: </label>

@@ -1,12 +1,7 @@
 <?php
 session_start();
-$db['db_host'] = "mysql.cs.virginia.edu";
-$db['db_user'] = "nn3un";
-$db['db_pass'] = "gnmSZIcO";
-$db['db_name'] = "nn3un_Databaseball";
-foreach($db as $key => $value){
-	define(strtoupper($key), $value);
-}
+include 'db.php';
+
 $connection = mysqli_connect(DB_HOST, DB_USER,DB_PASS,DB_NAME);
 if(!isset($_POST['update']) && !isset($_POST['update_info'])){
 	header("Location: batters.php");
@@ -120,11 +115,11 @@ else{
         </div>
         <div class="form-group">
             <label for="age">OBP: </label>
-            <input type = "number" step="0.01" class="form-control" min="0" max="1" name = "OBP" required value="<?php echo $OBP; ?>"><br>
+            <input type = "number" step="0.001" class="form-control" min="0" max="1" name = "OBP" required value="<?php echo $OBP; ?>"><br>
         </div>
         <div class="form-group">
             <label for="salary">Batting Average: </label>
-            <input type = "number" step="0.01" class="form-control"  min="0" max="1" name = "batting_avg" required value="<?php echo $batting_avg; ?>"><br>
+            <input type = "number" step="0.001" class="form-control"  min="0" max="1" name = "batting_avg" required value="<?php echo $batting_avg; ?>"><br>
         </div>
         <div class="form-group">
             <label for="home_runs">Home Runs: </label>

@@ -1,21 +1,10 @@
 <?php
 session_start();
-$db['db_host'] = "mysql.cs.virginia.edu";
-$db['db_user'] = "nn3un";
-$db['db_pass'] = "gnmSZIcO";
-$db['db_name'] = "nn3un_Databaseball";
-foreach($db as $key => $value){
-	define(strtoupper($key), $value);
-}
+include 'db.php';
+
 $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS,DB_NAME);
 if(isset($_POST['insert'])) {
     $player_id = $_POST['player_id'];
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
-    $team_id = $_POST['team_id'];
-    $team_name = $_POST['team_name'];
-    $salary = $_POST['salary'];
-    $age = $_POST['age'];
     $wins = $_POST['wins'];
     $losses = $_POST['losses'];
     $ERA = $_POST['ERA'];
@@ -80,7 +69,7 @@ else if(isset($_POST['delete'])) {
                 </div>
                 <div class="form-group">
                     <label for="pitcher_age">ERA: </label>
-                    <input type = "number" class="form-control" min="0" name = "ERA" required placeholder="0"><br>
+                    <input type = "number" step="0.001" class="form-control" min="0" name = "ERA" required placeholder="0"><br>
                 </div>
                 <div class="form-group">
                     <label for="pitcher_age">Innings Pitched: </label>
@@ -126,19 +115,19 @@ else if(isset($_POST['delete'])) {
                 <input type = "text" class="form-control"  name = "team_name" placeholder = "%Sox"><br>
             </div>
             <div class="form-group">
-                <label for="age">Age: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_age" min="0" placeholder = "0">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_age" min="0" placeholder = "0" display="inline">
+                <label for="age">Age: </label><br>Minimum: <input type = "number" step="0.001" class="form-control d-inline w-25 mr-5" name = "min_age" min="0" placeholder = "0">Maximum: <input type = "number" step="0.001" class="form-control w-25 d-inline"  name = "max_age" min="0" placeholder = "0" display="inline">
             </div>
             <div class="form-group">
-                <label for="salary">Salary: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_salary" min="0" placeholder = "0">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_salary" min="0" placeholder = "0" display="inline">
+                <label for="salary">Salary: </label><br>Minimum: <input type = "number" step="0.001" class="form-control d-inline w-25 mr-5" name = "min_salary" min="0" placeholder = "0">Maximum: <input type = "number" step="0.001" class="form-control w-25 d-inline"  name = "max_salary" min="0" placeholder = "0" display="inline">
             </div>
             <div class="form-group">
-                <label for="contract_length">By Contract Length: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_contract_length" min="0" placeholder = "0">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_contract_length" min="0" placeholder = "0" display="inline">
+                <label for="contract_length">By Contract Length: </label><br>Minimum: <input type = "number" step="0.001" class="form-control d-inline w-25 mr-5" name = "min_contract_length" min="0" placeholder = "0">Maximum: <input type = "number" step="0.001" class="form-control w-25 d-inline"  name = "max_contract_length" min="0" placeholder = "0" display="inline">
             </div>
             <div class="form-group">
-                <label for="ERA">By ERA: </label><br>Minimum: <input type = "number" step = "0.01" class="form-control d-inline w-25 mr-5" name = "min_ERA" min="0" placeholder = "0">Maximum: <input type = "number" step = "0.01" class="form-control w-25 d-inline"  name = "max_ERA" min="0" placeholder = "0" display="inline">
+                <label for="ERA">By ERA: </label><br>Minimum: <input type = "number" step = "0.001" class="form-control d-inline w-25 mr-5" name = "min_ERA" min="0" placeholder = "0">Maximum: <input type = "number" step = "0.001" class="form-control w-25 d-inline"  name = "max_ERA" min="0" placeholder = "0" display="inline">
             </div>
             <div class="form-group">
-                <label for="innings_pitched">By Innings Pitched: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_innings_pitched" min="0" placeholder = "0">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_innings_pitched" min="0" placeholder = "0" display="inline">
+                <label for="innings_pitched">By Innings Pitched: </label><br>Minimum: <input type = "number" step="0.001" class="form-control d-inline w-25 mr-5" name = "min_innings_pitched" min="0" placeholder = "0">Maximum: <input type = "number" step="0.001" class="form-control w-25 d-inline"  name = "max_innings_pitched" min="0" placeholder = "0" display="inline">
             </div>
             <hr class="pt-2">
             <div class=form-group>
@@ -175,7 +164,7 @@ else if(isset($_POST['delete'])) {
 
     <?php
         if($connection){
-            $query = "SELECT player_id, first_name, last_name, team_id, team_name, age, salary, contract_length, wins, losses, ERA, innings_pitched FROM Pitcher natural join Batter natural join Team";
+            $query = "SELECT player_id, first_name, last_name, team_id, team_name, age, salary, contract_length, wins, losses, ERA, innings_pitched FROM Pitcher natural join Batter natural join Team ORDER BY player_id";
             if (isset($_POST['search'])){
                 $params = [];
                 if (strlen($_POST['last_name']) > 0){

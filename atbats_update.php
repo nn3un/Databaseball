@@ -1,14 +1,8 @@
 <?php
 
 session_start();
-$db['db_host'] = "mysql.cs.virginia.edu";
-$db['db_user'] = "nn3un";
-$db['db_pass'] = "gnmSZIcO";
-$db['db_name'] = "nn3un_Databaseball";
+include 'db.php';
 
-foreach($db as $key => $value){
-	define(strtoupper($key), $value);
-}
 
 $connection = mysqli_connect(DB_HOST, DB_USER,DB_PASS,DB_NAME);
 if(!isset($_POST['update']) && !isset($_POST['update_info'])){
@@ -85,15 +79,15 @@ else{
         </div>
         <div class="form-group">
             <label for="strikes">Strikes: </label>
-            <input type = "number" class="form-control"  name = "strikes" min="0" required value="<?php echo $strikes ?>"><br>
+            <input type = "number" class="form-control"  name = "strikes" min="0" max = "3" required value="<?php echo $strikes ?>"><br>
         </div>
         <div class="form-group">
             <label for="balls">Balls: </label>
-            <input type = "number" class="form-control"  name = "balls" min="0" required value="<?php echo $balls?>"><br>
+            <input type = "number" class="form-control"  name = "balls" min="0" max = "4" required value="<?php echo $balls?>"><br>
         </div>
         <div class="form-group">
             <label for="runs_scored">Runs Scored: </label>
-            <input type = "number" class="form-control"  name = "runs_scored" min="0" required value="<?php echo $runs_scored ?>"><br>
+            <input type = "number" class="form-control"  name = "runs_scored" min="0" max = "4" required value="<?php echo $runs_scored ?>"><br>
         </div>
         <div class="form-group">
             <label for="out_or_not">Out or Not: </label>

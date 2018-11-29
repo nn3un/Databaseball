@@ -1,14 +1,7 @@
 <?php
 
 session_start();
-$db['db_host'] = "mysql.cs.virginia.edu";
-$db['db_user'] = "nn3un";
-$db['db_pass'] = "gnmSZIcO";
-$db['db_name'] = "nn3un_Databaseball";
-
-foreach($db as $key => $value){
-	define(strtoupper($key), $value);
-}
+include 'db.php';
 
 $connection = mysqli_connect(DB_HOST, DB_USER,DB_PASS,DB_NAME);
 if(!isset($_POST['update']) && !isset($_POST['update_info'])){

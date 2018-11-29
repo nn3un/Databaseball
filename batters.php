@@ -1,12 +1,6 @@
 <?php
 session_start();
-$db['db_host'] = "mysql.cs.virginia.edu";
-$db['db_user'] = "nn3un";
-$db['db_pass'] = "gnmSZIcO";
-$db['db_name'] = "nn3un_Databaseball";
-foreach($db as $key => $value){
-	define(strtoupper($key), $value);
-}
+include 'db.php';
 
 $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS,DB_NAME);
 if(isset($_POST['insert'])) {
@@ -105,7 +99,7 @@ else if(isset($_POST['delete'])) {
                 </div>
                 <div class="form-group">
                     <label for="contract_length">Batting Average: </label>
-                    <input type = "number" step="0.01" class="form-control"  name = "batting_avg" min="0" required placeholder="0.4"><br>
+                    <input type = "number" step="0.001" class="form-control"  name = "batting_avg" min="0" max="1" required placeholder="0.4"><br>
                 </div>
                 <div class="form-group">
                     <label for="contract_length">Home Runs: </label>
@@ -158,10 +152,10 @@ else if(isset($_POST['delete'])) {
                 <label for="salary">By Age: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_age" min="0" placeholder = "0">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_age" min="1" placeholder = "50" display="inline">
             </div>
             <div class="form-group">
-                <label for="salary">By OBP: </label><br>Minimum: <input type = "number" step="0.01" class="form-control d-inline w-25 mr-5" name = "min_OBP" min="0" max="1" placeholder = "0.2">Maximum: <input type = "number" step="0.01" class="form-control w-25 d-inline"  name = "max_OBP" min="0" max="1" placeholder = "0.5" display="inline">
+                <label for="salary">By OBP: </label><br>Minimum: <input type = "number" step="0.001" class="form-control d-inline w-25 mr-5" name = "min_OBP" min="0" max="1" placeholder = "0.2">Maximum: <input type = "number" step="0.001" class="form-control w-25 d-inline"  name = "max_OBP" min="0" max="1" placeholder = "0.5" display="inline">
             </div>
             <div class="form-group">
-                <label for="salary">By Batting Average: </label><br>Minimum: <input type = "number" step="0.01" class="form-control d-inline w-25 mr-5" name = "min_avg" min="0" max="1" placeholder = "0.2">Maximum: <input type = "number" step="0.01" class="form-control w-25 d-inline"  name = "max_avg" min="0" max="1" placeholder = "0.6" display="inline">
+                <label for="salary">By Batting Average: </label><br>Minimum: <input type = "number" step="0.001" class="form-control d-inline w-25 mr-5" name = "min_avg" min="0" max="1" placeholder = "0.2">Maximum: <input type = "number" step="0.001" class="form-control w-25 d-inline"  name = "max_avg" min="0" max="1" placeholder = "0.6" display="inline">
             </div>
             <div class="form-group">
                 <label for="salary">By Home Runs: </label><br>Minimum: <input type = "number" class="form-control d-inline w-25 mr-5" name = "min_runs" min="0" placeholder = "2">Maximum: <input type = "number" class="form-control w-25 d-inline"  name = "max_runs" min="0" placeholder = "50" display="inline">
@@ -206,8 +200,8 @@ else if(isset($_POST['delete'])) {
                 if (strlen($_POST['first_name']) > 0){
                     $params['first_name'] = " LIKE '{$_POST['first_name']}'";
                 }
-                if (strlen($_POST['first_name']) > 0){
-                    $params['first_name'] = " LIKE '{$_POST['first_name']}'";
+                if (strlen($_POST['last_name']) > 0){
+                    $params['last_name'] = " LIKE '{$_POST['last_name']}'";
                 }
                 if (strlen($_POST['team_name']) > 0){
                     $params['team_name'] = " LIKE '{$_POST['team_name']}'";

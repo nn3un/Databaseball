@@ -1,12 +1,7 @@
 <?php
 session_start();
-$db['db_host'] = "mysql.cs.virginia.edu";
-$db['db_user'] = "nn3un";
-$db['db_pass'] = "gnmSZIcO";
-$db['db_name'] = "nn3un_Databaseball";
-foreach($db as $key => $value){
-	define(strtoupper($key), $value);
-}
+include 'db.php';
+
 $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS,DB_NAME);
 if(isset($_POST['insert'])) {    
     $batter_id = $_POST['batter_id'];
@@ -69,19 +64,19 @@ else if(isset($_POST['delete'])) {
                 </div>
                 <div class="form-group">
                     <label for="strikes">Strikes: </label>
-                    <input type = "number" class="form-control"  name = "strikes" min="0" required placeholder="1"><br>
+                    <input type = "number" class="form-control"  name = "strikes" min="0" max = "3" required placeholder="1"><br>
                 </div>
                 <div class="form-group">
                     <label for="balls">Balls: </label>
-                    <input type = "number" class="form-control"  name = "balls" min="0" required placeholder="1"><br>
+                    <input type = "number" class="form-control"  name = "balls" min="0" max = "4" required placeholder="1"><br>
                 </div>
                 <div class="form-group">
                     <label for="runs_scored">Runs Scored: </label>
-                    <input type = "number" class="form-control"  name = "runs_scored" min="0" required placeholder="1"><br>
+                    <input type = "number" class="form-control"  name = "runs_scored" min="0" max = "4" required placeholder="1"><br>
                 </div>
                 <div class="form-group">
                     <label for="out_or_not">Out or Not: </label>
-                    <input type = "number" class="form-control"  name = "out_or_not" min="0" required placeholder="1"><br>
+                    <input type = "number" class="form-control"  name = "out_or_not" min="0" max="1" required placeholder="1"><br>
                 </div>
 
                 <button class="btn btn-success w-100" name="insert">Insert into table</button>
@@ -163,7 +158,7 @@ else if(isset($_POST['delete'])) {
 
     <?php
         if($connection){
-            $query = "SELECT at_bat_id, game_id, batter_id, B1.last_name as bname, pitcher_id, B2.last_name as pname, strikes, balls, runs_scored, out_or_not FROM At_Bat, Batter as B1, Batter as B2 WHERE At_Bat.batter_id = B1.player_id AND At_Bat.pitcher_id = B2.player_id";
+            $query = "SELECT at_bat_id, game_id, batter_id, B1.last_name as bname, pitcher_id, B2.last_name as pname, strikes, balls, runs_scored, out_or_not FROM At_Bat, Batter as B1, Batter as B2 WHERE At_Bat.batter_id = B1.player_id AND At_Bat.pitcher_id = B2.player_id ORDER BY at_bat_id";
             if (isset($_POST['search'])){
                 $params = [];
                 if (strlen($_POST['bname']) > 0){
