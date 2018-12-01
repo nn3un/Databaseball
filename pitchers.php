@@ -164,7 +164,7 @@ else if(isset($_POST['delete'])) {
 
     <?php
         if($connection){
-            $query = "SELECT player_id, first_name, last_name, team_id, team_name, age, salary, contract_length, wins, losses, ERA, innings_pitched FROM Pitcher natural join Batter natural join Team ORDER BY player_id";
+            $query = "SELECT player_id, first_name, last_name, team_id, team_name, age, salary, contract_length, wins, losses, ERA, innings_pitched FROM Pitcher natural join Batter natural join Team ";
             if (isset($_POST['search'])){
                 $params = [];
                 if (strlen($_POST['last_name']) > 0){
@@ -247,7 +247,7 @@ else if(isset($_POST['delete'])) {
                     $query = substr($query, 0, -1);
                 }
             }
-            $query .= ";";
+            $query .= " ;";
             $select_all_pitchers_query = mysqli_query($connection,$query);
             if (!$select_all_pitchers_query){
                 $error_msg = mysqli_error($connection);

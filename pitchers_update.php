@@ -10,7 +10,7 @@ else{
 	//Coming from coaches.php
 	if($connection && isset($_POST['update'])){
 		$player_id = $_POST['player_id'];
-		$query = "SELECT player_id, first_name, last_name, team_id, team_name, salary, age, contract_length, wins, losses, ERA, innings_pitched FROM Pitcher natural join Batter natural join Team";
+		$query = "SELECT * FROM Pitcher WHERE player_id = $player_id";
 	    $select_query = mysqli_query($connection,$query);
 	    if ($select_query && mysqli_num_rows($select_query) > 0){
 	    	$row = mysqli_fetch_assoc($select_query);
@@ -32,7 +32,7 @@ else{
         $losses = $_POST['losses'];
         $ERA = $_POST['ERA'];
         $innings_pitched = $_POST['innings_pitched'];
-        $query = "UPDATE Pitcher SET player_id = '{$player_id}', wins = {$wins}, losses = {$losses}, ERA = '{$ERA}', innings_pitched = {$innings_pitched} WHERE player_id = {$player_id}";
+        $query = "UPDATE Pitcher SET player_id = '{$player_id}', wins = {$wins}, losses = {$losses}, ERA = {$ERA}, innings_pitched = {$innings_pitched} WHERE player_id = {$player_id}";
         $update_query = mysqli_query($connection, $query);
         if (!$update_query) {
             $error_msg =  mysqli_error($connection);

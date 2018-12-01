@@ -86,14 +86,14 @@ else if(isset($_POST['delete'])) {
             <form method="POST" class="m-5 p-2 border rounded" action="atbats_update.php">
                 <div class="form-group">
                     <label for="at_bat_id">Enter At Bat Id: </label>
-                    <input type = "text" class="form-control" name = "at_bat_id" required><br>
+                    <input type = "number" class="form-control" name = "at_bat_id" required><br>
                 </div>
                 <button class="btn btn-primary m-0 w-100" name = "update">Update</button>
             </form>
             <form method="POST" class="m-5 mt-4 p-2 border rounded" action="atbats.php">
                 <div class="form-group">
                     <label for="at_bat_id">Enter At Bat ID: </label>
-                    <input type = "text" class="form-control" name = "at_bat_id" required><br>
+                    <input type = "number" class="form-control" name = "at_bat_id" required><br>
                 </div>
                 <button class="btn btn-danger m-0 w-100" name ="delete">Delete</button>
             </form>
@@ -158,7 +158,7 @@ else if(isset($_POST['delete'])) {
 
     <?php
         if($connection){
-            $query = "SELECT at_bat_id, game_id, batter_id, B1.last_name as bname, pitcher_id, B2.last_name as pname, strikes, balls, runs_scored, out_or_not FROM At_Bat, Batter as B1, Batter as B2 WHERE At_Bat.batter_id = B1.player_id AND At_Bat.pitcher_id = B2.player_id ORDER BY at_bat_id";
+            $query = "SELECT at_bat_id, game_id, batter_id, B1.last_name as bname, pitcher_id, B2.last_name as pname, strikes, balls, runs_scored, out_or_not FROM At_Bat, Batter as B1, Batter as B2 WHERE At_Bat.batter_id = B1.player_id AND At_Bat.pitcher_id = B2.player_id ";
             if (isset($_POST['search'])){
                 $params = [];
                 if (strlen($_POST['bname']) > 0){
@@ -192,9 +192,8 @@ else if(isset($_POST['delete'])) {
                     //Getting rid of last AND
                     $query = substr($query, 0, -3);
                 }
-                if (isset($_POST['sort'])){
-                    $query .= " ORDER BY ";
-                    
+                $query .= " ORDER BY ";
+                if (isset($_POST['sort'])){                    
                     if(in_array('bname', $_POST['sort'])){
                         $query .= " B1.last_name ASC,";
                     }
@@ -210,11 +209,13 @@ else if(isset($_POST['delete'])) {
                     if(in_array('runs_scored', $_POST['sort'])){
                         $query .= " runs_scored ASC,";
                     }
-                    //Getting rid of last Comma
-                    $query = substr($query, 0, -1);
                 }
+                $query .= " at_bat_id ASC";
             }
-            $query .= ";";
+            else{
+                $query .= " ORDER BY at_bat_id ASC";
+            }
+            $query .= " ;";
             $select_all_at_bats_query = mysqli_query($connection,$query);
             if (!$select_all_at_bats_query){
                 $error_msg = mysqli_error($connection);

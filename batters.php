@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['admin'])){
+    header('Location: login.php');
+    exit();
+}
 include 'db.php';
 
 $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS,DB_NAME);
@@ -194,7 +198,7 @@ else if(isset($_POST['delete'])) {
 
     <?php
         if($connection){
-            $query = "SELECT player_id, first_name, last_name, team_name, age, salary, contract_length, batting_avg, OBP, home_runs FROM Batter natural join Team";
+            $query = "SELECT player_id, first_name, last_name, team_name, age, salary, contract_length, batting_avg, OBP, home_runs FROM Batter natural join Team ";
             if (isset($_POST['search'])){
                 $params = [];
                 if (strlen($_POST['first_name']) > 0){
@@ -249,8 +253,8 @@ else if(isset($_POST['delete'])) {
                     //Getting rid of last AND
                     $query = substr($query, 0, -3);
                 }
+                $query .= " ORDER BY ";
                 if (isset($_POST['sort'])){
-                    $query .= " ORDER BY ";
                     if(in_array('batting_avg', $_POST['sort'])){
                         $query .= " batting_avg ASC,";
                     }
@@ -275,9 +279,13 @@ else if(isset($_POST['delete'])) {
                     if(in_array('first_name', $_POST['sort'])){
                         $query .= " first_name ASC,";
                     }
-                    //Getting rid of last Comma
-                    $query = substr($query, 0, -1);
                 }
+                //Getting rid of last Comma
+                $query .= " player_id ASC";
+                //$query = substr($query, 0, -1);
+            }
+            else{
+                $query .= " ORDER BY player_id ASC";
             }
             $query .= ";";
             $select_all_batters_query = mysqli_query($connection,$query);
